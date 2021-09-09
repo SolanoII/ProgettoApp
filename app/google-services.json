@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "274816922292",
+    "project_id": "progetto-be95e",
+    "storage_bucket": "progetto-be95e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274816922292:android:0ed24f7ed633648d01dde1",
+        "android_client_info": {
+          "package_name": "it.uninsubria.progetto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274816922292-fkemifgkrcr3kcsj86a4v748ivtpep42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5JZ-Ia94O4pCrQW5eZP6cP10p8S5XoDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274816922292-fkemifgkrcr3kcsj86a4v748ivtpep42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
