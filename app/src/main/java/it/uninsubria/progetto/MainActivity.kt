@@ -12,33 +12,33 @@ import android.widget.*
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.row.*
+import java.nio.file.Paths.get
 
 class MainActivity : AppCompatActivity() {
 
-
+    val SECOND_ACTIVITY = 1
     private val TAG = "MainActivity"
     private var mUserReference: DatabaseReference? =
         FirebaseDatabase.getInstance().getReference("users")
-    private val mChapters: MutableList<Chapters> = ArrayList()
-    private val nAdapter: MyAdapter = MyAdapter(this, mChapters)
+    private val mBook: MutableList<Book> = ArrayList()
+    private val nAdapter: MyAdapter = MyAdapter(this, mBook)
     private var mUsersChildListener: ChildEventListener = getUsersChildEventListener()
+    private var description: String = "Desc"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toyUsers = arrayOf(
-            "Virat Kohli", "Rohit Sharma", "Steve Smith",
-            "Kane Williamson", "Ross Taylor", "Mario Rossi",
-            "Giuseppe verdi", "Pippo Baudo",
-            "Virat Kohli", "Rohit Sharma", "Steve Smith",
-            "Kane Williamson", "Ross Taylor", "Mario Rossi",
-            "Giuseppe Verdi", "Pippo Baudo"
-        )
+            "BASIC_RULES Step-By-Step_Characters Choose_a_Race Text",
+            "BASIC_RULES Step-By-Step_Characters Choose_a_Class Text1",
+            "BASIC_RULES Step-By-Step_Characters Determine_Ability_Scores Text2",
+            )
         var i = 1
         toyUsers.forEach {
             val pos = it.split(" ")
-            val u = Chapters(pos[0], pos[1], i++)
+            val u = Book(pos[0], pos[1], pos[2], pos[3], i++)
             val userId = u.toString()
+            description = u.toDesc()
             mUserReference!!.child(userId).setValue(u)
         }
 // pass data to the Adapter
@@ -59,25 +59,25 @@ class MainActivity : AppCompatActivity() {
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded:" + snapshot.key!!)
-                val newUser = snapshot.getValue(Chapters::class.java)
-                mChapters.add(newUser!!)
+                val newUser = snapshot.getValue(Book::class.java)
+                mBook.add(newUser!!)
                 nAdapter.notifyDataSetChanged()
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildChanged:" + snapshot.key!!)
-                val newUser = snapshot.getValue(Chapters::class.java)
+                val newUser = snapshot.getValue(Book::class.java)
                 val userKey = snapshot.key
-                mChapters.find { e -> e.toString().equals(userKey) }?.set(newUser!!)
+                mBook.find { e -> e.toString().equals(userKey) }?.set(newUser!!)
                 nAdapter.notifyDataSetChanged()
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + snapshot.key!!)
-                val newUser = snapshot.getValue(Chapters::class.java)
+                val newUser = snapshot.getValue(Book::class.java)
                 val userKey = snapshot.key
-                var u = mChapters.find { e -> e.toString().equals(userKey) }
-                mChapters.remove(u)
+                var u = mBook.find { e -> e.toString().equals(userKey) }
+                mBook.remove(u)
                 nAdapter.notifyDataSetChanged()
             }
 
@@ -119,7 +119,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
     override fun onStop() {
         super.onStop()
         if (mUsersChildListener != null)
@@ -127,36 +126,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    class MyAdapter(private val context: Context, val data: MutableList<Chapters>) : BaseAdapter() {
-        override fun getCount(): Int {
-            return data.size
+
+    fun visualize(v: View){
+        val intent = Intent(this@MainActivity, visualize::class.java)
+
+        intent.putExtra("main_activity_data", description)
+        startActivityForResult(intent, SECOND_ACTIVITY)
         }
-
-        override fun getItem(position: Int): Any {
-            return position
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-            var NewView = convertView
-            if (convertView == null)
-                NewView = LayoutInflater.from(context).inflate(R.layout.row, parent, false)
-            if (NewView != null) {
-                val personName = NewView.findViewById<TextView>(R.id.textViewChapter)
-                val personSurname = NewView.findViewById<TextView>(R.id.textViewSubchapter)
-
-                personName.text = data[position].name
-                personSurname.text = data[position].surname
-
-            }
-            return NewView
-        }
-    }
-
 
 
 
