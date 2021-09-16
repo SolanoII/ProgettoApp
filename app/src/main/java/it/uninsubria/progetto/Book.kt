@@ -9,9 +9,7 @@ class Book(var name: String, var chapter: String, var subchapter: String, var te
     override fun toString(): String{
         return "$name-$chapter-$subchapter"
     }
-    fun toDesc(): String{
-        return "$text"
-    }
+
     fun set(newBook: Book) {
         this.id = newBook.id
         this.name = newBook.name

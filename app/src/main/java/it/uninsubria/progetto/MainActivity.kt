@@ -1,18 +1,14 @@
 package it.uninsubria.progetto
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.row.*
-import java.nio.file.Paths.get
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,12 +19,14 @@ class MainActivity : AppCompatActivity() {
     private val mBook: MutableList<Book> = ArrayList()
     private val nAdapter: MyAdapter = MyAdapter(this, mBook)
     private var mUsersChildListener: ChildEventListener = getUsersChildEventListener()
-    private var description: String = "Desc"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toyUsers = arrayOf(
+
+
+         val toyUsers = arrayOf(
             "BASIC_RULES Step-By-Step_Characters Choose_a_Race Text",
             "BASIC_RULES Step-By-Step_Characters Choose_a_Class Text1",
             "BASIC_RULES Step-By-Step_Characters Determine_Ability_Scores Text2",
@@ -38,11 +36,19 @@ class MainActivity : AppCompatActivity() {
             val pos = it.split(" ")
             val u = Book(pos[0], pos[1], pos[2], pos[3], i++)
             val userId = u.toString()
-            description = u.toDesc()
+       //     description = u.toDesc().toString()
             mUserReference!!.child(userId).setValue(u)
         }
+
+
 // pass data to the Adapter
+        val list_view = findViewById<View>(R.id.list_view) as ListView
         list_view.adapter = nAdapter
+        list_view.itemsCanFocus = true
+
+
+
+
 
 
 
@@ -62,6 +68,8 @@ class MainActivity : AppCompatActivity() {
                 val newUser = snapshot.getValue(Book::class.java)
                 mBook.add(newUser!!)
                 nAdapter.notifyDataSetChanged()
+
+
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -123,16 +131,19 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         if (mUsersChildListener != null)
             mUserReference!!.removeEventListener(mUsersChildListener)
+        mBook.clear()
+
     }
 
 
-
-    fun visualize(v: View){
+   /* fun visualize(v: View){
         val intent = Intent(this@MainActivity, visualize::class.java)
-
-        intent.putExtra("main_activity_data", description)
+        val desc = desc.text.toString()
+        intent.putExtra("main_activity_data", desc)
         startActivityForResult(intent, SECOND_ACTIVITY)
-        }
+
+    }
+*/
 
 
 
