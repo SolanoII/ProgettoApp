@@ -7,9 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
+
+
+
+
 import kotlinx.android.synthetic.main.row.*
 import kotlinx.android.synthetic.main.row.view.*
+
+
 
 class MyAdapter(private val context: Context, val data: MutableList<Book>) : BaseAdapter() {
     override fun getCount(): Int {
